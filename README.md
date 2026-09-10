@@ -145,48 +145,7 @@ You will be automatically redirected to the Keycloak login page.
 
 ---
 
-## Demo Accounts
 
-### Main Demo Account
-
-| Field | Value |
-|-------|-------|
-| **Email** | `samiemlourtatza@gmail.com` |
-| **Password** | `Password123!` |
-| **Role** | Organization Manager — NexusTech Solutions |
-
-This account has full access to all features: organization management, teams, subspaces, documents, audit logs, notifications, and analytics.
-
-### Additional Test Accounts
-
-> All accounts use password: **`Password123!`**
-
-| Name | Email | Role |
-|------|-------|------|
-| Sami Elmourtazak | samiemlourtatza@gmail.com | Org Manager |
-| Alice Chen | alice.chen@nexustech.io | Org Member |
-| Bob Martinez | bob.martinez@nexustech.io | Team Manager |
-| Clara Johnson | clara.johnson@nexustech.io | Org Member |
-| David Kim | david.kim@nexustech.io | Org Member |
-| Eva Rossi | eva.rossi@nexustech.io | Org Member |
-| Frank Dubois | frank.dubois@nexustech.io | Org Member |
-| Grace Nguyen | grace.nguyen@nexustech.io | Org Member |
-| Hana Sato | hana.sato@nexustech.io | Org Member |
-
----
-
-## Service URLs
-
-| Service | URL | Credentials |
-|---------|-----|-------------|
-| **Application** | http://localhost:4200 | See Demo Accounts |
-| **Keycloak Admin Console** | http://localhost:8080/admin | `admin` / `admin` |
-| **MinIO Console** | http://localhost:9001 | `minioadmin` / `minioadmin` |
-| **Mailpit (Email UI)** | http://localhost:8025 | No login required |
-| **pgAdmin** | http://localhost:5050 | `admin@admin.com` / `admin` |
-| **Backend API** | https://localhost:8443/api | Used internally by the frontend |
-
----
 
 ## Troubleshooting
 
