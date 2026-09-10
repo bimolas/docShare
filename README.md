@@ -51,7 +51,7 @@ secure-document-sharings/
 │   └── realm-export.json         # Auto-imported Keycloak realm (users + config)
 ├── src/                          # Spring Boot backend (Java 21)
 ├── pom.xml
-└── securedocsharing-frontend/    # Angular 19 frontend
+└── securedocsharing-frontend/    
     ├── package.json
     └── src/
 ```
