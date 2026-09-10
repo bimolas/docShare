@@ -100,6 +100,8 @@ describe('SidebarComponent', () => {
       availableWorkspaces: mockAvailableWorkspaces,
       isLoading: mockIsWorkspaceLoading,
       resolveDefaultWorkspace: resolveDefaultWorkspaceSpy,
+      lastKnownWorkspaceId: signal<number | null>(null),
+      enterPersonalContext: jasmine.createSpy('enterPersonalContext').and.returnValue(of([])),
     };
 
     mockCurrentUser = signal<UserProfile | null>({

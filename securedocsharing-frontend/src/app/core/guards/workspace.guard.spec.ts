@@ -104,7 +104,10 @@ describe('Workspace Guards', () => {
       'activeOrgCode',
       'availableWorkspaces',
       'isPersonal',
+      'isOrganization',
+      'enterPersonalContext',
     ]);
+    mockWorkspaceStore.isOrganization.and.returnValue(false);
 
     mockRouter = jasmine.createSpyObj<Router>('Router', ['createUrlTree', 'navigate', 'parseUrl']);
     mockRouter.createUrlTree.and.callFake((commands: any[]) => ({ toString: () => '/' + commands.join('/') } as UrlTree));
@@ -327,6 +330,34 @@ describe('Workspace Guards', () => {
           expect(result).toBeTrue();
           expect(mockWorkspaceStore.loadPersonalWorkspaces).toHaveBeenCalled();
           expect(mockWorkspaceStore.loadUserOrganizations).toHaveBeenCalled();
+          done();
+        });
+      });
+    });
+
+    it('should preserve organization context and avoid loading personal workspaces when navigating to notifications from an organization', (done) => {
+      mockWorkspaceStore.isOrganization.and.returnValue(true);
+
+      const mockState = { url: '/w/personal/notifications' } as RouterStateSnapshot;
+
+      TestBed.runInInjectionContext(() => {
+        (personalGuard({} as any, mockState) as Observable<boolean>).subscribe((result) => {
+          expect(result).toBeTrue();
+          expect(mockWorkspaceStore.loadPersonalWorkspaces).not.toHaveBeenCalled();
+          done();
+        });
+      });
+    });
+
+    it('should preserve organization context when navigating to shared-with-me from an organization', (done) => {
+      mockWorkspaceStore.isOrganization.and.returnValue(true);
+
+      const mockState = { url: '/w/personal/shared-with-me' } as RouterStateSnapshot;
+
+      TestBed.runInInjectionContext(() => {
+        (personalGuard({} as any, mockState) as Observable<boolean>).subscribe((result) => {
+          expect(result).toBeTrue();
+          expect(mockWorkspaceStore.loadPersonalWorkspaces).not.toHaveBeenCalled();
           done();
         });
       });

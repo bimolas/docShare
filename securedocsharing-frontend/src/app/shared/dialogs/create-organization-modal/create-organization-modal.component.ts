@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LayoutStore } from '../../../state/layout/layout.store';
 import { WorkspaceContextStore } from '../../../state/workspace/workspace-context.store';
+import { AuthStore } from '../../../state/auth/auth.store';
 import { OrganizationApiService } from '../../../core/services/organization-api.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { IconComponent } from '../../components/icon/icon.component';
@@ -371,6 +372,7 @@ import { IconComponent } from '../../components/icon/icon.component';
 export class CreateOrganizationModalComponent {
   private readonly layoutStore = inject(LayoutStore);
   private readonly workspaceContextStore = inject(WorkspaceContextStore);
+  private readonly authStore = inject(AuthStore);
   private readonly orgApiService = inject(OrganizationApiService);
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
@@ -428,10 +430,28 @@ export class CreateOrganizationModalComponent {
           `Organization "${createdOrg.name}" created successfully.`
         );
 
-        // Refresh user workspaces with force reload and select the newly created workspace
-        this.workspaceContextStore.loadUserWorkspaces(true).subscribe({
+        // 1. Reload user profile so currentUser() has the new organization membership & capabilities
+        this.authStore.loadUserProfile().subscribe({
           next: () => {
-            this.router.navigate(['/w', createdOrg.orgCode, 's', 'default', 'dashboard']);
+            // 2. Select the newly created organization in workspace store and navigate canonically
+            this.workspaceContextStore.selectOrganization(createdOrg.orgCode, true).subscribe({
+              next: () => {
+                this.router.navigate(['/org', createdOrg.orgCode, 'dashboard']);
+              },
+              error: () => {
+                this.router.navigate(['/org', createdOrg.orgCode, 'dashboard']);
+              },
+            });
+          },
+          error: () => {
+            this.workspaceContextStore.selectOrganization(createdOrg.orgCode, true).subscribe({
+              next: () => {
+                this.router.navigate(['/org', createdOrg.orgCode, 'dashboard']);
+              },
+              error: () => {
+                this.router.navigate(['/org', createdOrg.orgCode, 'dashboard']);
+              },
+            });
           },
         });
       },

@@ -410,4 +410,37 @@ describe('WorkspaceContextStore', () => {
       });
     });
   });
+
+  describe('lastKnownWorkspaceId and enterPersonalContext', () => {
+    it('should track lastKnownWorkspaceId when selecting a workspace', (done) => {
+      expect(store.lastKnownWorkspaceId()).toBeNull();
+
+      store.selectOrganization('ORG_1').subscribe(() => {
+        expect(store.activeWorkspace()?.id).toBe(42);
+        expect(store.lastKnownWorkspaceId()).toBe(42);
+
+        store.selectWorkspace(43);
+        expect(store.lastKnownWorkspaceId()).toBe(43);
+        done();
+      });
+    });
+
+    it('should cleanly enter personal context with enterPersonalContext()', (done) => {
+      // First in ORG_1
+      store.selectOrganization('ORG_1').subscribe(() => {
+        expect(store.activeOrganization()?.orgCode).toBe('ORG_1');
+        expect(store.isOrganization()).toBeTrue();
+
+        // Switch to personal context
+        store.enterPersonalContext().subscribe((workspaces) => {
+          expect(workspaces.length).toBe(3);
+          expect(store.activeOrganization()).toBeNull();
+          expect(store.isPersonal()).toBeTrue();
+          expect(store.activeWorkspace()?.id).toBe(10);
+          expect(store.lastKnownWorkspaceId()).toBe(10);
+          done();
+        });
+      });
+    });
+  });
 });

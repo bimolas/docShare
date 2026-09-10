@@ -178,9 +178,28 @@ export const workspaceGuard: CanActivateFn = (
  *
  * If organizations fail, Personal Space remains usable with organizations as [].
  * If personal workspaces fail, the store's error state is preserved according to existing architecture.
+ *
+ * CRITICAL CONTEXT PRESERVATION:
+ * When navigating to global personal views (notifications, shared-with-me, shared-by-me) while in an
+ * organization context, the active organization context is strictly preserved without resetting.
  */
-export const personalGuard: CanActivateFn = (): Observable<boolean> => {
+export const personalGuard: CanActivateFn = (
+  _route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+): Observable<boolean> => {
   const workspaceContextStore = inject(WorkspaceContextStore);
+
+  const isGlobalView =
+    state?.url &&
+    (state.url.includes('/notifications') ||
+     state.url.includes('/shared-with-me') ||
+     state.url.includes('/shared-by-me'));
+
+  if (isGlobalView && workspaceContextStore.isOrganization()) {
+    // Preserve existing organization context; user is accessing a personal discovery or inbox view
+    return of(true);
+  }
+
   return forkJoin({
     workspaces: workspaceContextStore.loadPersonalWorkspaces(),
     organizations: workspaceContextStore.loadUserOrganizations(),

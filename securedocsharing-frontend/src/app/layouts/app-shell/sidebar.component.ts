@@ -1543,7 +1543,10 @@ export class SidebarComponent {
 
   readonly activeWorkspaceNumericId = computed<number | null>(() => {
     const ws = this.activeWorkspace();
-    return ws && typeof ws.id === 'number' ? ws.id : null;
+    if (ws && typeof ws.id === 'number') {
+      return ws.id;
+    }
+    return this.workspaceContextStore.lastKnownWorkspaceId();
   });
 
   readonly userEmail = computed(() => this.authStore.currentUser()?.email ?? 'user@securedoc.com');
@@ -1647,6 +1650,7 @@ export class SidebarComponent {
 
   onSelectPersonal(): void {
     this.closePopovers();
+    this.workspaceContextStore.enterPersonalContext().subscribe();
     const currentFeature = this.getCurrentFeature();
     const targetFeature = isOrgOnlyFeature(currentFeature) ? 'dashboard' : currentFeature;
     this.router.navigate(['/w', 'personal', targetFeature]);

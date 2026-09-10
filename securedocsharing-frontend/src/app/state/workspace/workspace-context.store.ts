@@ -46,6 +46,7 @@ export class WorkspaceContextStore {
   private readonly _availableWorkspaces = signal<ProjectWorkspaceModel[]>([]);
   private readonly _isLoading = signal<boolean>(false);
   private readonly _error = signal<string | null>(null);
+  private readonly _lastKnownWorkspaceId = signal<number | null>(null);
 
   private _lastOrgsLoadedAt = 0;
   private readonly TTL_MS = 5 * 60 * 1000; // 5 minutes TTL
@@ -57,6 +58,7 @@ export class WorkspaceContextStore {
   readonly availableWorkspaces = this._availableWorkspaces.asReadonly();
   readonly isLoading = this._isLoading.asReadonly();
   readonly error = this._error.asReadonly();
+  readonly lastKnownWorkspaceId = this._lastKnownWorkspaceId.asReadonly();
 
   // ── Canonical Computed State ───────────────────────────────────────────────
   readonly isPersonal = computed(() => !this._activeOrganization());
@@ -124,6 +126,7 @@ export class WorkspaceContextStore {
     this._isLoading.set(false);
     this._error.set(null);
     this._lastOrgsLoadedAt = 0;
+    this._lastKnownWorkspaceId.set(null);
   }
 
   // ── Canonical Organization Loading & Selection ─────────────────────────────
@@ -172,6 +175,10 @@ export class WorkspaceContextStore {
   selectOrganization(orgCode: string, force = false): Observable<ProjectWorkspaceModel[]> {
     const currentOrg = this._activeOrganization();
     const currentWorkspaces = this._availableWorkspaces();
+
+    if (currentOrg && currentOrg.orgCode !== orgCode) {
+      this._lastKnownWorkspaceId.set(null);
+    }
 
     if (
       !force &&
@@ -255,6 +262,17 @@ export class WorkspaceContextStore {
     );
   }
 
+  // ── Canonical Personal Context Switching ──────────────────────────────────
+  /**
+   * Explicitly activates Personal Space context and loads personal workspaces.
+   */
+  enterPersonalContext(): Observable<ProjectWorkspaceModel[]> {
+    this._activeOrganization.set(null);
+    this._lastKnownWorkspaceId.set(null);
+    this._error.set(null);
+    return this.loadPersonalWorkspaces(true);
+  }
+
   // ── Canonical Workspace Selection ──────────────────────────────────────────
   /**
    * Selects active workspace by numeric workspaceId.
@@ -296,6 +314,7 @@ export class WorkspaceContextStore {
     }
 
     this._activeWorkspace.set(matchedWs);
+    this._lastKnownWorkspaceId.set(matchedWs.id);
 
     // Persist active workspace preference (null orgCode for personal)
     this.subspacePersistenceService.saveWorkspacePreference(
@@ -394,6 +413,9 @@ export class WorkspaceContextStore {
    * If zero personal workspaces exist, activeWorkspace becomes null without error.
    */
   selectPersonalWorkspace(workspaceId?: number): Observable<ProjectWorkspaceModel | null> {
+    if (this._activeOrganization()) {
+      this._lastKnownWorkspaceId.set(null);
+    }
     this._activeOrganization.set(null);
     this._error.set(null);
 
@@ -429,6 +451,7 @@ export class WorkspaceContextStore {
   setActiveWorkspace(ws: ProjectWorkspaceModel | null): void {
     this._activeWorkspace.set(ws);
     if (ws) {
+      this._lastKnownWorkspaceId.set(ws.id);
       if (!this._availableWorkspaces().some((w) => w.id === ws.id)) {
         this._availableWorkspaces.set([...this._availableWorkspaces(), ws]);
       }
@@ -470,6 +493,7 @@ export class WorkspaceContextStore {
       const matched = activeWorkspaces.find((w) => w.id === persistedId);
       if (matched) {
         this._activeWorkspace.set(matched);
+        this._lastKnownWorkspaceId.set(matched.id);
         return;
       }
     }
@@ -478,6 +502,7 @@ export class WorkspaceContextStore {
     const defaultWs = activeWorkspaces.find((w) => w.isDefault === true);
     if (defaultWs) {
       this._activeWorkspace.set(defaultWs);
+      this._lastKnownWorkspaceId.set(defaultWs.id);
       this.subspacePersistenceService.saveWorkspacePreference(userId, null, defaultWs.id);
       return;
     }
@@ -485,6 +510,7 @@ export class WorkspaceContextStore {
     // 3. Fallback to first active workspace
     const firstWs = activeWorkspaces[0];
     this._activeWorkspace.set(firstWs);
+    this._lastKnownWorkspaceId.set(firstWs.id);
     this.subspacePersistenceService.saveWorkspacePreference(userId, null, firstWs.id);
   }
 
@@ -516,6 +542,7 @@ export class WorkspaceContextStore {
       const matched = activeWorkspaces.find((w) => w.id === persistedId);
       if (matched) {
         this._activeWorkspace.set(matched);
+        this._lastKnownWorkspaceId.set(matched.id);
         return;
       }
     }
@@ -524,6 +551,7 @@ export class WorkspaceContextStore {
     const defaultWs = activeWorkspaces.find((w) => w.isDefault === true);
     if (defaultWs) {
       this._activeWorkspace.set(defaultWs);
+      this._lastKnownWorkspaceId.set(defaultWs.id);
       this.subspacePersistenceService.saveWorkspacePreference(userId, orgCode, defaultWs.id);
       return;
     }
@@ -531,6 +559,7 @@ export class WorkspaceContextStore {
     // 3. Fallback to first active workspace
     const firstWs = activeWorkspaces[0];
     this._activeWorkspace.set(firstWs);
+    this._lastKnownWorkspaceId.set(firstWs.id);
     this.subspacePersistenceService.saveWorkspacePreference(userId, orgCode, firstWs.id);
   }
 
