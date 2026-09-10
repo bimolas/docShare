@@ -1,0 +1,63 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  application:
+    name: secure-document-sharing
+  
+  # Database configuration
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/docshare}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
+
+
+  # Security & Resource Server Configuration
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: ${OAUTH2_ISSUER_URI:http://localhost:8080/realms/docshare}
+          jwk-set-uri: ${OAUTH2_JWK_SET_URI:http://localhost:8080/realms/docshare/protocol/openid-connect/certs}
+          client-secret: ${OAUTH2_CLIENT_SECRET:hXw821Ykj3ZaCMzkl83sSASi72GXSrw7c}
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+  # Redis Caching Configuration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+  # Kafka Configuration
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: docshare-audit-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+# Custom AWS S3 / MinIO settings
+aws:
+  s3:
+    endpoint: ${AWS_S3_ENDPOINT:http://localhost:9000}
+    bucket-name: ${AWS_S3_BUCKET:docshare-bucket}
+    access-key: ${AWS_S3_ACCESS_KEY:minio_admin}
+    secret-key: ${AWS_S3_SECRET_KEY:MinioSecretPassword123!}
+    region: ${AWS_S3_REGION:us-east-1}

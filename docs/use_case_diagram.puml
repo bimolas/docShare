@@ -1,0 +1,112 @@
+@startuml SecureDocSharing_UseCases
+!theme plain
+left to right direction
+
+' ==========================================================
+' CLEAN & COMPACT STYLING (Inspired by Reference Layout)
+' ==========================================================
+skinparam {
+    nodesep 24
+    ranksep 32
+    padding 2
+    wrapWidth 140
+    
+    roundcorner 6
+    shadowing false
+    
+    ActorBorderColor #1E293B
+    ActorBackgroundColor #F8FAFC
+    ActorFontSize 11
+    ActorFontStyle bold
+    
+    UsecaseBorderColor #2563EB
+    UsecaseBackgroundColor #EFF6FF
+    UsecaseFontSize 10
+    
+    ArrowColor #334155
+    ArrowFontSize 9
+    ArrowFontStyle italic
+    
+    RectangleBorderColor #475569
+    RectangleBackgroundColor #FFFFFF
+    RectangleFontSize 12
+    RectangleFontStyle bold
+}
+
+' ==========================================================
+' LEFT-SIDE ACTORS (User & Team Member)
+' ==========================================================
+actor "Authenticated User" as User
+actor "Team Member" as TeamMember
+
+TeamMember -up-|> User
+
+' ==========================================================
+' RIGHT-SIDE ACTORS (Managers & Administrators)
+' ==========================================================
+actor "Team Manager" as TeamManager
+actor "Organization Admin" as OrgAdmin
+
+' ==========================================================
+' SINGLE SYSTEM BOUNDARY (No cluttered inner packages)
+' ==========================================================
+rectangle "SecureDocSharing Platform" {
+
+    ' --- USER & COLLABORATION USE CASES (LEFT SIDE) ---
+    usecase "Browse Workspaces\n& Subspaces" as UC_Browse
+    usecase "Upload Document" as UC_Upload
+    usecase "Download Document" as UC_Download
+    usecase "Preview Document" as UC_Preview
+    usecase "Access 'Shared with Me'" as UC_SharedWithMe
+    usecase "Share Resource\n(Direct or Link)" as UC_Share
+    usecase "Access Team Workspace" as UC_TeamSpace
+
+    ' --- EXTENSIONS & VALUE-ADD (CENTER) ---
+    usecase "Verify Document\nAuthenticity" as UC_Verify
+    usecase "Set Expiration\n& Password" as UC_ProtectShare
+
+    ' --- TEAM & ORG GOVERNANCE USE CASES (RIGHT SIDE) ---
+    usecase "Manage Team Members" as UC_TeamMembers
+    usecase "Transfer Team Leadership" as UC_TransferManager
+    usecase "Manage Subspaces" as UC_Subspaces
+    usecase "Allocate Resources\nto Teams" as UC_Allocate
+    usecase "Assign Permission Level\n(VIEW / DOWNLOAD / EDIT)" as UC_AssignPerm
+    usecase "Configure Security\n& Sharing Policies" as UC_Policies
+    usecase "Review Compliance\nAudit Logs" as UC_Audit
+}
+
+' ==========================================================
+' ASSOCIATIONS: LEFT ACTORS -> LEFT USE CASES
+' ==========================================================
+User -- UC_Browse
+User -- UC_Upload
+User -- UC_Download
+User -- UC_Preview
+User -- UC_SharedWithMe
+User -- UC_Share
+
+TeamMember -- UC_TeamSpace
+
+' ==========================================================
+' ASSOCIATIONS: RIGHT USE CASES -> RIGHT ACTORS
+' ==========================================================
+UC_TeamMembers -- TeamManager
+UC_TransferManager -- TeamManager
+
+UC_Subspaces -- OrgAdmin
+UC_Allocate -- OrgAdmin
+UC_Policies -- OrgAdmin
+UC_Audit -- OrgAdmin
+
+' ==========================================================
+' USE CASE DEPENDENCIES (<<extend>> & <<include>>)
+' ==========================================================
+
+' Center extensions (optional features)
+UC_Verify .left.> UC_Preview : <<extend>>
+UC_ProtectShare .left.> UC_Share : <<extend>>
+
+' Mandatory included capability
+UC_Allocate .down.> UC_AssignPerm : <<include>>
+
+@enduml

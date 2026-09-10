@@ -1,0 +1,394 @@
+<div class="auth-root">
+  <!-- Background -->
+  <div class="auth-bg" aria-hidden="true">
+    <div class="auth-bg-orb auth-bg-orb--1"></div>
+    <div class="auth-bg-orb auth-bg-orb--2"></div>
+    <div class="auth-bg-grid"></div>
+  </div>
+
+  <!-- Brand panel (desktop) -->
+  <aside class="auth-brand-panel" aria-hidden="true">
+    <div class="auth-brand-inner">
+      <div class="auth-logo-wrap">
+        <div class="auth-logo-mark">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="10" fill="rgba(255,255,255,0.15)"/><path d="M10 14a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2a4 4 0 0 1-4 4h-8a4 4 0 0 1-4-4v-2Z" fill="white" opacity="0.9"/><rect x="10" y="22" width="16" height="4" rx="2" fill="white" opacity="0.5"/></svg>
+        </div>
+        <span class="auth-brand-name">SecureDocSharing</span>
+      </div>
+      <h2 class="auth-brand-headline">Secure sharing,<br>built for teams.</h2>
+      <p class="auth-brand-sub">Enterprise-grade document security with granular permissions, audit trails, and time-limited links.</p>
+
+      <!-- Step tracker -->
+      <div class="auth-steps-tracker">
+        <!-- Step 1: Account setup -->
+        <div class="auth-step-node" [class.active]="step() === 'credentials'" [class.done]="step() !== 'credentials'">
+          <div class="auth-step-dot">
+            @if (step() !== 'credentials') {
+              <!-- Lucide Check -->
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            } @else {
+              <!-- Lucide UserPlus -->
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            }
+          </div>
+          <div class="auth-step-label">Account setup</div>
+        </div>
+        <div class="auth-step-line"></div>
+        <!-- Step 2: Email verification -->
+        <div class="auth-step-node" [class.active]="step() === 'verify-email'" [class.done]="step() === 'onboarding' || step() === 'loading'">
+          <div class="auth-step-dot">
+            @if (step() === 'onboarding' || step() === 'loading') {
+              <!-- Lucide Check -->
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            } @else {
+              <!-- Lucide Mail -->
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            }
+          </div>
+          <div class="auth-step-label">Verify email</div>
+        </div>
+        <div class="auth-step-line"></div>
+        <!-- Step 3: Personalize -->
+        <div class="auth-step-node" [class.active]="step() === 'onboarding' || step() === 'loading'">
+          <div class="auth-step-dot">
+            <!-- Lucide Sparkles -->
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.88 5.76L20 10l-5.76 1.88L12 18l-1.88-5.76L4 10l5.76-1.88z"/></svg>
+          </div>
+          <div class="auth-step-label">Personalize</div>
+        </div>
+      </div>
+
+      <div class="auth-brand-stats">
+        <div class="auth-stat"><span class="auth-stat-num">10K+</span><span class="auth-stat-lbl">Teams worldwide</span></div>
+        <div class="auth-stat-divider"></div>
+        <div class="auth-stat"><span class="auth-stat-num">99.9%</span><span class="auth-stat-lbl">Uptime SLA</span></div>
+        <div class="auth-stat-divider"></div>
+        <div class="auth-stat"><span class="auth-stat-num">SOC2</span><span class="auth-stat-lbl">Compliant</span></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="auth-main">
+
+    <!-- ── STEP 1: CREDENTIALS ─────────────────────────────────── -->
+    @if (step() === 'credentials') {
+      <div class="auth-card" role="main">
+        <div class="auth-mobile-brand">
+          <svg width="26" height="26" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="10" fill="#fb923c"/><path d="M10 14a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2a4 4 0 0 1-4 4h-8a4 4 0 0 1-4-4v-2Z" fill="white" opacity="0.9"/><rect x="10" y="22" width="16" height="4" rx="2" fill="white" opacity="0.5"/></svg>
+          <span>SecureDocSharing</span>
+        </div>
+
+        <header class="auth-card-header">
+          <h1 class="auth-card-title">Create your account</h1>
+          <p class="auth-card-subtitle">Start sharing securely in minutes. No credit card required.</p>
+        </header>
+
+        <!-- Google signup -->
+        <button id="btn-google-signup" class="btn-social" type="button" (click)="signUpWithGoogle()" [disabled]="isLoading()">
+          <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2a10.34 10.34 0 0 0-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92a8.78 8.78 0 0 0 2.68-6.62Z" fill="#4285F4"/><path d="M9 18a8.59 8.59 0 0 0 5.96-2.18l-2.91-2.26A5.43 5.43 0 0 1 9 14.7a5.41 5.41 0 0 1-5.08-3.74H.96v2.33A9 9 0 0 0 9 18Z" fill="#34A853"/><path d="M3.92 10.96A5.44 5.44 0 0 1 3.63 9a5.44 5.44 0 0 1 .29-.96V5.71H.96A9 9 0 0 0 0 9a9 9 0 0 0 .96 3.29l2.96-2.33Z" fill="#FBBC05"/><path d="M9 3.58a4.86 4.86 0 0 1 3.44 1.35l2.58-2.58A8.64 8.64 0 0 0 9 0 9 9 0 0 0 .96 5.71L3.92 8.04A5.41 5.41 0 0 1 9 3.58Z" fill="#EA4335"/></svg>
+          <span>Sign up with Google</span>
+        </button>
+
+        <div class="auth-divider"><span>or sign up with email</span></div>
+
+        <!-- Registration form -->
+        <form class="auth-form" (ngSubmit)="submitCredentials()" novalidate>
+          <!-- Name row -->
+          <div class="auth-field-row">
+            <div class="auth-field">
+              <label for="su-fname" class="auth-label">First name</label>
+              <input id="su-fname" class="auth-input" type="text" placeholder="Jane" autocomplete="given-name"
+                [(ngModel)]="firstName" name="firstName" required>
+            </div>
+            <div class="auth-field">
+              <label for="su-lname" class="auth-label">Last name</label>
+              <input id="su-lname" class="auth-input" type="text" placeholder="Smith" autocomplete="family-name"
+                [(ngModel)]="lastName" name="lastName" required>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="auth-field">
+            <label for="su-email" class="auth-label">Work email</label>
+            <input id="su-email" class="auth-input" type="email" placeholder="jane@company.com" autocomplete="email"
+              [(ngModel)]="email" name="email" required>
+          </div>
+
+          <!-- Password -->
+          <div class="auth-field">
+            <label for="su-password" class="auth-label">Password</label>
+            <div class="auth-input-wrap">
+              <input id="su-password" class="auth-input" [type]="showPassword() ? 'text' : 'password'"
+                placeholder="Create a strong password" autocomplete="new-password"
+                [(ngModel)]="password" name="password" required>
+              <button type="button" class="auth-input-eye" (click)="showPassword.set(!showPassword())" [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
+                @if (showPassword()) {
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                } @else {
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                }
+              </button>
+            </div>
+
+            <!-- Strength bar -->
+            @if (password.length > 0) {
+              <div class="strength-bar-wrap" aria-label="Password strength: {{ passwordStrength.label }}">
+                <div class="strength-bar-track">
+                  <div class="strength-bar-fill" [style.width.%]="strengthBarWidth" [style.background]="passwordStrength.color"></div>
+                </div>
+                @if (passwordStrength.label) {
+                  <span class="strength-label" [style.color]="passwordStrength.color">{{ passwordStrength.label }}</span>
+                }
+              </div>
+              <ul class="strength-checks" role="list" aria-label="Password requirements">
+                @for (check of passwordStrength.checks; track check.label) {
+                  <li class="strength-check" [class.passed]="check.passed">
+                    @if (check.passed) {
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                    } @else {
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+                    }
+                    {{ check.label }}
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+
+          <!-- Confirm password -->
+          <div class="auth-field">
+            <label for="su-confirm" class="auth-label">Confirm password</label>
+            <div class="auth-input-wrap">
+              <input id="su-confirm" class="auth-input" [type]="showConfirm() ? 'text' : 'password'"
+                placeholder="Repeat your password" autocomplete="new-password"
+                [(ngModel)]="confirmPassword" name="confirmPassword" required
+                [class.input-error]="confirmPassword.length > 0 && confirmPassword !== password">
+              <button type="button" class="auth-input-eye" (click)="showConfirm.set(!showConfirm())" aria-label="Toggle confirm visibility">
+                @if (showConfirm()) {
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                } @else {
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                }
+              </button>
+            </div>
+            @if (confirmPassword.length > 0 && confirmPassword !== password) {
+              <p class="auth-field-error">Passwords don't match</p>
+            }
+          </div>
+
+          <!-- Terms -->
+          <label class="auth-checkbox-label" for="su-terms">
+            <input id="su-terms" type="checkbox" class="auth-checkbox" [(ngModel)]="agreedToTerms" name="agreedToTerms">
+            <span>I agree to the <a href="#" class="auth-link">Terms of Service</a> and <a href="#" class="auth-link">Privacy Policy</a></span>
+          </label>
+
+          @if (errorMessage()) {
+            @if (isDuplicateEmail()) {
+              <!-- Duplicate email: show actionable banner with sign-in link -->
+              <div class="auth-error auth-error--info" role="alert">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>An account with this email already exists. <a routerLink="/sign-in" class="auth-link">Sign in instead</a> or try a different email.</span>
+              </div>
+            } @else {
+              <div class="auth-error" role="alert">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                {{ errorMessage() }}
+              </div>
+            }
+          }
+
+          <button id="btn-create-account" class="btn-primary" type="submit" [disabled]="!canSubmitCredentials || isLoading()">
+            @if (isLoading()) {
+              <span class="btn-spinner"></span><span>Creating account…</span>
+            } @else {
+              <span>Create account</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            }
+          </button>
+
+          <p class="auth-footer-text">Already have an account? <a id="link-signin" routerLink="/sign-in" class="auth-link">Sign in</a></p>
+        </form>
+      </div>
+    }
+
+    <!-- ── STEP 2: VERIFY EMAIL ────────────────────────────────── -->
+    @if (step() === 'verify-email') {
+      <div class="auth-card auth-card--centered">
+        <div class="auth-verify-icon-wrap">
+          <div class="auth-verify-icon-glow" aria-hidden="true"></div>
+          <div class="auth-verify-icon" aria-hidden="true">
+            <!-- Lucide Mail icon in soft orange -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+        </div>
+        <h1 class="auth-card-title">Check your inbox</h1>
+        <p class="auth-card-subtitle">We've sent a verification link to <strong class="email-highlight">{{ email }}</strong>. Click it to activate your account, then come back here.</p>
+
+        <div class="auth-verify-steps">
+          <div class="auth-verify-step">
+            <!-- Lucide Inbox -->
+            <span class="auth-verify-step-num" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+            </span>
+            <span>Open the email from SecureDocSharing</span>
+          </div>
+          <div class="auth-verify-step">
+            <!-- Lucide MousePointerClick -->
+            <span class="auth-verify-step-num" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9l5 12 1.774-5.226L21 14 9 9z"/><path d="M16.071 16.071l4.243 4.243"/></svg>
+            </span>
+            <span>Click <strong>"Verify email address"</strong></span>
+          </div>
+          <div class="auth-verify-step">
+            <!-- Lucide CornerDownLeft -->
+            <span class="auth-verify-step-num" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg>
+            </span>
+            <span>Return here and click Continue</span>
+          </div>
+        </div>
+
+        <!-- Dev shortcut button to Mailpit -->
+        <a href="http://localhost:8025" target="_blank" rel="noopener" class="btn-secondary btn-inbox-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+          <span>Open Mailpit Inbox (Dev)</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+
+        @if (errorMessage()) {
+          <div class="auth-error" role="alert">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <button id="btn-continue-after-verify" class="btn-primary" type="button" [disabled]="isLoading()" (click)="continueAfterVerification()">
+          @if (isLoading()) {
+            <span class="btn-spinner"></span><span>Verifying…</span>
+          } @else {
+            I've verified my email — Continue
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          }
+        </button>
+
+        <div class="auth-resend-wrap">
+          <p class="auth-footer-text">Didn't receive it?</p>
+          <button id="btn-resend-email" class="btn-ghost" type="button" [disabled]="resendCooldown() > 0" (click)="resendEmail()">
+            @if (resendCooldown() > 0) {
+              Resend in {{ resendCooldown() }}s
+            } @else {
+              Resend verification email
+            }
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- ── STEP 3: ONBOARDING ──────────────────────────────────── -->
+    @if (step() === 'onboarding') {
+      <div class="auth-card auth-card--wide" role="main">
+        <header class="auth-card-header">
+          <div class="auth-onboarding-badge">🎉 Almost there!</div>
+          <h1 class="auth-card-title">Help us personalize your experience</h1>
+          <p class="auth-card-subtitle">This takes 30 seconds and helps us tailor SecureDocSharing for you.</p>
+        </header>
+
+        <form class="auth-form" (ngSubmit)="submitOnboarding()" novalidate>
+
+          <!-- Role -->
+          <div class="auth-field">
+            <label class="auth-label">What best describes your role?</label>
+            <div class="auth-pill-grid" role="group" aria-label="Select your role">
+              @for (opt of roles; track opt.value) {
+                <button type="button" class="auth-pill" [class.selected]="role === opt.value" (click)="role = opt.value">
+                  {{ opt.label }}
+                </button>
+              }
+            </div>
+          </div>
+
+          <!-- Use case -->
+          <div class="auth-field">
+            <label class="auth-label">What will you mainly use SecureDocSharing for?</label>
+            <div class="auth-pill-grid" role="group" aria-label="Select your main use case">
+              @for (opt of useCaseOptions; track opt.value) {
+                <button type="button" class="auth-pill" [class.selected]="useCase === opt.value" (click)="useCase = opt.value">
+                  {{ opt.label }}
+                </button>
+              }
+            </div>
+          </div>
+
+          <!-- Team size -->
+          <div class="auth-field">
+            <label class="auth-label">Team size <span class="auth-label-optional">(optional)</span></label>
+            <div class="auth-pill-grid auth-pill-grid--sm" role="group" aria-label="Select team size">
+              @for (opt of teamSizeOptions; track opt.value) {
+                <button type="button" class="auth-pill" [class.selected]="teamSize === opt.value" (click)="teamSize = opt.value">
+                  {{ opt.label }}
+                </button>
+              }
+            </div>
+          </div>
+
+          <!-- Hear about us -->
+          <div class="auth-field">
+            <label for="su-hear" class="auth-label">How did you hear about us?</label>
+            <select id="su-hear" class="auth-select" [(ngModel)]="hearAboutUs" name="hearAboutUs">
+              <option value="" disabled>Select an option…</option>
+              @for (opt of hearAboutOptions; track opt.value) {
+                <option [value]="opt.value">{{ opt.label }}</option>
+              }
+            </select>
+          </div>
+
+          <button id="btn-finish-onboarding" class="btn-primary" type="submit" [disabled]="!canSubmitOnboarding || isLoading()">
+            @if (isLoading()) {
+              <span class="btn-spinner"></span><span>Setting up your workspace…</span>
+            } @else {
+              <span>Finish & go to dashboard</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            }
+          </button>
+        </form>
+      </div>
+    }
+
+    <!-- ── STEP 4: LOADING ─────────────────────────────────────── -->
+    @if (step() === 'loading') {
+      <div class="auth-card auth-card--centered auth-card--loading" role="status" aria-live="polite">
+        <div class="auth-loading-ring" aria-hidden="true">
+          <svg class="auth-loading-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="36" stroke="#ffedd5" stroke-width="6"/>
+            <circle cx="40" cy="40" r="36" stroke="#fb923c" stroke-width="6" stroke-linecap="round" stroke-dasharray="50 176" class="auth-loading-arc"/>
+          </svg>
+          <div class="auth-loading-logo">
+            <svg width="28" height="28" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="9" fill="#fb923c"/><path d="M10 14a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2a4 4 0 0 1-4 4h-8a4 4 0 0 1-4-4v-2Z" fill="white" opacity="0.9"/><rect x="10" y="22" width="16" height="4" rx="2" fill="white" opacity="0.5"/></svg>
+          </div>
+        </div>
+        <h2 class="auth-loading-title">Setting up your workspace</h2>
+        <p class="auth-loading-sub">Configuring your account and applying your preferences…</p>
+        <div class="auth-loading-steps">
+          <div class="auth-loading-step auth-loading-step--done">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Account created
+          </div>
+          <div class="auth-loading-step auth-loading-step--done">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Preferences saved
+          </div>
+          <div class="auth-loading-step auth-loading-step--active">
+            <span class="auth-loading-dot"></span>
+            Signing you in…
+          </div>
+        </div>
+      </div>
+    }
+
+    <p class="auth-legal">
+      By creating an account, you agree to our
+      <a href="#" class="auth-link-subtle">Terms of Service</a> and <a href="#" class="auth-link-subtle">Privacy Policy</a>.
+    </p>
+  </main>
+</div>

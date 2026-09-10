@@ -1,0 +1,413 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────────
+   SecureDocSharing — Hardened Global Design Tokens & Base Styles
+   Brand: #fb923c (Soft Orange) | Primary Fill: #f97316 | WCAG AA on dark bg
+───────────────────────────────────────────────────────────────── */
+
+:root {
+  /* ── Shadcn UI Standard HSL Theme Tokens ─────────────────────── */
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 24.6 95% 53.1%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 24.6 95% 53.1%;
+  --radius: 0.5rem;
+
+  /* ── Brand & Primary Orange System ───────────────────────────── */
+  --sd-color-brand:                 #fb923c;
+  --sd-color-brand-focus:           #fb923c;
+  --sd-color-primary:               #f97316; /* medium orange — used as hover */
+  --sd-color-primary-hover:         #ea580c; /* deeper orange — used as active */
+  --sd-color-primary-active:        #c2410c;
+  --sd-color-primary-subtle:        #fff7ed;
+  --sd-color-primary-subtle-hover:  #ffedd5;
+  --sd-color-primary-border:        #fed7aa;
+
+  /* Synonym / Legacy Tokens for Backward Compatibility */
+  --color-brand:                 var(--sd-color-brand);
+  --color-primary:               var(--sd-color-primary);
+  --color-primary-hover:         var(--sd-color-primary-hover);
+  --color-primary-active:        var(--sd-color-primary-active);
+  --color-primary-subtle:        var(--sd-color-primary-subtle);
+  --color-primary-border:        var(--sd-color-primary-border);
+  --color-accent:                var(--sd-color-brand);
+  --color-accent-hover:          var(--sd-color-primary-hover);
+  --color-accent-subtle:         var(--sd-color-primary-subtle);
+  --color-accent-border:         var(--sd-color-primary-border);
+
+  /* ── Surfaces & Backgrounds ──────────────────────────────────── */
+  --sd-color-bg:               #f8fafc;
+  --sd-color-surface:          #ffffff;
+  --sd-color-surface-elevated: #ffffff;
+  --sd-color-surface-hover:    #f1f5f9;
+  --sd-color-surface-selected: #fff1ec;
+  --sd-color-surface-disabled: #f8fafc;
+
+  --color-bg:               var(--sd-color-bg);
+  --color-surface:          var(--sd-color-surface);
+  --color-surface-elevated: var(--sd-color-surface-elevated);
+  --color-bg-hover:         var(--sd-color-surface-hover);
+  --color-selected:         var(--sd-color-surface-selected);
+
+  /* ── Text & Contrast ─────────────────────────────────────────── */
+  --sd-color-text-primary:   #0f172a;
+  --sd-color-text-secondary: #475569;
+  --sd-color-text-muted:     #64748b;
+  --sd-color-text-disabled:  #94a3b8;
+  --sd-color-text-inverse:   #ffffff;
+  --sd-color-text-brand:     #ea580c;
+
+  --color-text:           var(--sd-color-text-primary);
+  --color-text-primary:   var(--sd-color-text-primary);
+  --color-text-secondary: var(--sd-color-text-secondary);
+  --color-text-muted:     var(--sd-color-text-muted);
+  --color-text-disabled:  var(--sd-color-text-disabled);
+
+  /* ── Borders & Focus ─────────────────────────────────────────── */
+  --sd-color-border:          #e2e8f0;
+  --sd-color-border-subtle:   #f1f5f9;
+  --sd-color-border-hover:    #cbd5e1;
+  --sd-color-border-focus:    #fb923c;
+  --sd-color-border-disabled: #e2e8f0;
+
+  --color-border:        var(--sd-color-border);
+  --color-border-subtle: var(--sd-color-border-subtle);
+  --color-border-focus:  var(--sd-color-border-focus);
+  --color-focus:         var(--sd-color-border-focus);
+
+  /* ── Status Colors ───────────────────────────────────────────── */
+  --sd-color-success:        #16a34a;
+  --sd-color-success-subtle: #f0fdf4;
+  --sd-color-success-border: #bbf7d0;
+  --sd-color-warning:        #d97706;
+  --sd-color-warning-subtle: #fffbeb;
+  --sd-color-warning-border: #fef3c7;
+  --sd-color-danger:         #dc2626;
+  --sd-color-danger-subtle:  #fef2f2;
+  --sd-color-danger-border:  #fecaca;
+  --sd-color-info:           #2563eb;
+  --sd-color-info-subtle:    #eff6ff;
+  --sd-color-info-border:    #bfdbfe;
+
+  --color-success:        var(--sd-color-success);
+  --color-success-subtle: var(--sd-color-success-subtle);
+  --color-warning:        var(--sd-color-warning);
+  --color-warning-subtle: var(--sd-color-warning-subtle);
+  --color-error:          var(--sd-color-danger);
+  --color-danger:         var(--sd-color-danger);
+  --color-danger-subtle:  var(--sd-color-danger-subtle);
+  --color-info:           var(--sd-color-info);
+  --color-info-subtle:    var(--sd-color-info-subtle);
+  --color-secure:         var(--sd-color-success);
+
+  /* ── Overlay & Backdrop ──────────────────────────────────────── */
+  --sd-color-backdrop: rgba(15, 23, 42, 0.4);
+
+  /* ── Stacking Scale (z-index Tokens) ────────────────────────── */
+  --sd-z-base:            0;
+  --sd-z-sticky:          100;
+  --sd-z-dropdown:        1000;
+  --sd-z-drawer-backdrop: 2000;
+  --sd-z-drawer:          2001;
+  --sd-z-modal-backdrop:  3000;
+  --sd-z-modal:           3001;
+  --sd-z-toast:           9000;
+
+  /* ── Table States ────────────────────────────────────────────── */
+  --sd-color-table-header-bg:    #f8fafc;
+  --sd-color-table-row-hover:    #f8fafc;
+  --sd-color-table-row-selected: #fff1ec;
+  --sd-color-table-border:       #e2e8f0;
+
+  /* ── Security & Governance Classification Semantics ──────────── */
+  --sd-color-sec-internal-bg:      #f1f5f9;
+  --sd-color-sec-internal-text:    #334155;
+  --sd-color-sec-internal-border:  #cbd5e1;
+
+  --sd-color-sec-external-bg:      #fff7ed;
+  --sd-color-sec-external-text:    #c2410c;
+  --sd-color-sec-external-border:  #ffedd5;
+
+  --sd-color-sec-trusted-bg:       #f0fdf4;
+  --sd-color-sec-trusted-text:     #15803d;
+  --sd-color-sec-trusted-border:   #dcfce7;
+
+  --sd-color-sec-restricted-bg:    #fef2f2;
+  --sd-color-sec-restricted-text:  #b91c1c;
+  --sd-color-sec-restricted-border: #fee2e2;
+
+  --sd-color-sec-confidential-bg:    #faf5ff;
+  --sd-color-sec-confidential-text:  #6b21a8;
+  --sd-color-sec-confidential-border:#f3e8ff;
+
+  /* ── Control Heights ─────────────────────────────────────────── */
+  --sd-size-control-sm: 28px;
+  --sd-size-control-md: 36px;
+  --sd-size-control-lg: 44px;
+
+  /* ── Elevation & Shadows ─────────────────────────────────────── */
+  --sd-shadow-sm:       0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --sd-shadow-card:     0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+  --sd-shadow-floating: 0 10px 25px -5px rgba(15, 23, 42, 0.10), 0 8px 10px -6px rgba(15, 23, 42, 0.06);
+  --sd-shadow-modal:    0 20px 48px -10px rgba(15, 23, 42, 0.18);
+
+  --shadow-subtle:   var(--sd-shadow-sm);
+  --shadow-card:     var(--sd-shadow-card);
+  --shadow-floating: var(--sd-shadow-floating);
+  --shadow-modal:    var(--sd-shadow-modal);
+  --shadow-sm:       var(--sd-shadow-sm);
+  --shadow-md:       var(--sd-shadow-card);
+  --shadow-lg:       var(--sd-shadow-floating);
+
+  /* ── Border Radii ────────────────────────────────────────────── */
+  --sd-radius-sm:   4px;
+  --sd-radius-md:   6px;
+  --sd-radius-lg:   10px;
+  --sd-radius-xl:   14px;
+  --sd-radius-2xl:  20px;
+  --sd-radius-full: 9999px;
+
+  --radius-sm:   var(--sd-radius-sm);
+  --radius-md:   var(--sd-radius-md);
+  --radius-lg:   var(--sd-radius-lg);
+  --radius-xl:   var(--sd-radius-xl);
+  --radius-2xl:  var(--sd-radius-2xl);
+  --radius-full: var(--sd-radius-full);
+
+  /* ── Spacing Scale ───────────────────────────────────────────── */
+  --sd-space-3xs: 2px;
+  --sd-space-2xs: 4px;
+  --sd-space-xs:  6px;
+  --sd-space-sm:  8px;
+  --sd-space-md:  12px;
+  --sd-space-lg:  16px;
+  --sd-space-xl:  24px;
+  --sd-space-2xl: 32px;
+  --sd-space-3xl: 48px;
+
+  --space-3xs: var(--sd-space-3xs);
+  --space-2xs: var(--sd-space-2xs);
+  --space-xs:  var(--sd-space-xs);
+  --space-sm:  var(--sd-space-sm);
+  --space-md:  var(--sd-space-md);
+  --space-lg:  var(--sd-space-lg);
+  --space-xl:  var(--sd-space-xl);
+  --space-2xl: var(--sd-space-2xl);
+  --space-3xl: var(--sd-space-3xl);
+
+  /* ── Motion & Durations ──────────────────────────────────────── */
+  --sd-duration-instant: 75ms;
+  --sd-duration-fast:    150ms;
+  --sd-duration-normal:  250ms;
+  --sd-duration-slow:    350ms;
+  --sd-ease-spring:      cubic-bezier(0.16, 1, 0.3, 1);
+  --sd-ease-standard:    cubic-bezier(0.4, 0, 0.2, 1);
+
+  --duration-instant: var(--sd-duration-instant);
+  --duration-fast:    var(--sd-duration-fast);
+  --duration-normal:  var(--sd-duration-normal);
+  --duration-slow:    var(--sd-duration-slow);
+  --ease-spring:      var(--sd-ease-spring);
+  --ease-standard:    var(--sd-ease-standard);
+
+  /* ── Typography Scale ────────────────────────────────────────── */
+  --sd-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --sd-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --sd-font-size-xs:   0.75rem;     /* 12px */
+  --sd-font-size-sm:   0.8125rem;   /* 13px */
+  --sd-font-size-base: 0.875rem;    /* 14px */
+  --sd-font-size-lg:   1.125rem;    /* 18px */
+  --sd-font-size-xl:   1.25rem;     /* 20px */
+  --sd-font-size-2xl:  1.5rem;      /* 24px */
+  --sd-font-size-3xl:  2rem;        /* 32px */
+
+  --sd-weight-normal:   400;
+  --sd-weight-medium:   500;
+  --sd-weight-semibold: 600;
+  --sd-weight-bold:     700;
+
+  --sd-leading-tight:   1.2;
+  --sd-leading-snug:    1.3;
+  --sd-leading-normal:  1.5;
+  --sd-leading-relaxed: 1.625;
+
+  --font-family:      var(--sd-font-sans);
+  --font-family-mono: var(--sd-font-mono);
+  --font-size-xs:     var(--sd-font-size-xs);
+  --font-size-sm:     var(--sd-font-size-sm);
+  --font-size-base:   var(--sd-font-size-base);
+  --font-size-lg:     var(--sd-font-size-lg);
+  --font-size-xl:     var(--sd-font-size-xl);
+  --font-size-2xl:    var(--sd-font-size-2xl);
+  --font-size-3xl:    var(--sd-font-size-3xl);
+}
+
+/* ── Reset & Base ────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--sd-font-sans);
+  font-size: var(--sd-font-size-base);
+  color: var(--sd-color-text-primary);
+  background: var(--sd-color-bg);
+  line-height: var(--sd-leading-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Typography ──────────────────────────────────────────────── */
+h1 { font-size: var(--sd-font-size-2xl); font-weight: var(--sd-weight-bold); line-height: var(--sd-leading-tight); }
+h2 { font-size: var(--sd-font-size-xl);  font-weight: var(--sd-weight-semibold); line-height: var(--sd-leading-snug); }
+h3 { font-size: var(--sd-font-size-lg);  font-weight: var(--sd-weight-semibold); line-height: var(--sd-leading-snug); }
+h4 { font-size: var(--sd-font-size-base); font-weight: var(--sd-weight-semibold); }
+
+a {
+  color: var(--sd-color-text-brand);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+/* Numeric Tabular Alignment for Data, Timestamps, Sizes, and Hashes */
+.font-tabular,
+td,
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── CDK Overlay Stacking Context ────────────────────────────── */
+.cdk-overlay-container {
+  z-index: 9999 !important;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8 !important;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ── Focus Rings ─────────────────────────────────────────────── */
+:focus-visible {
+  outline: 1px solid var(--sd-color-brand-focus);
+  outline-offset: 2px;
+  border-radius: var(--sd-radius-sm);
+}
+
+/* ── View Transitions ────────────────────────────────────────── */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s;
+}
+
+/* ── Restrained Enterprise Cloudy Border System ──────────────── */
+.cloudy-border {
+  position: relative;
+  background: var(--sd-color-surface);
+  border-radius: var(--sd-radius-lg);
+  border: 1px solid var(--sd-color-border-subtle);
+  box-shadow: var(--sd-shadow-card);
+  transition: 
+    border-color var(--sd-duration-fast) var(--sd-ease-spring),
+    box-shadow var(--sd-duration-fast) var(--sd-ease-spring),
+    transform var(--sd-duration-fast) var(--sd-ease-spring);
+  isolation: isolate;
+}
+
+.cloudy-border:hover,
+.cloudy-border.cloudy-active {
+  border-color: var(--sd-color-primary-border);
+  box-shadow: var(--sd-shadow-floating);
+}
+
+.cloudy-border-surface,
+.cloudy-border-static {
+  position: relative;
+  background: var(--sd-color-surface);
+  border-radius: var(--sd-radius-lg);
+  border: 1px solid var(--sd-color-border-subtle);
+  box-shadow: var(--sd-shadow-sm);
+  transition: border-color var(--sd-duration-fast) ease, box-shadow var(--sd-duration-fast) ease;
+}
+
+.cloudy-border-surface:hover,
+.cloudy-border-static:hover {
+  border-color: var(--sd-color-border-hover);
+  box-shadow: var(--sd-shadow-card);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,263 @@
+@startuml SecureDocSharing_ClassDiagram
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+' ==========================================================
+' BALANCED SCHEMATIC STYLING (Generous spacing, zero overlap)
+' ==========================================================
+skinparam {
+    nodesep 55
+    ranksep 50
+    roundcorner 6
+    shadowing false
+
+    ClassBorderColor #334155
+    ClassBackgroundColor #FFFFFF
+    ClassHeaderBackgroundColor #F1F5F9
+    ClassFontSize 11
+    ClassFontStyle bold
+    AttributeFontSize 10
+    MethodFontSize 9
+
+    EnumBorderColor #047857
+    EnumBackgroundColor #F0FDF4
+    EnumHeaderBackgroundColor #DCFCE7
+    EnumFontSize 9
+    EnumFontStyle bold
+    AttributeIconSize 0
+
+    PackageBorderColor #94A3B8
+    PackageBackgroundColor #FAFAFA
+    PackageFontSize 11
+    PackageFontStyle bold
+
+    ArrowColor #475569
+    ArrowFontSize 9
+    ArrowFontStyle bold
+}
+
+hide empty methods
+
+' ==========================================================
+' RANK 0 (TOP): ORGANIZATION GOVERNANCE & POLICIES
+' ==========================================================
+class Organization #F8FAFC {
+    + orgCode: String [PK]
+    + name: String
+    + createdAt: Instant
+    --
+    + registerMember(user, role)
+    + createTeam(name, manager): Team
+    + createWorkspace(name): Workspace
+}
+
+class WorkspacePolicy #F8FAFC {
+    + id: Long [PK]
+    + workspaceType: WorkspaceType
+    + externalSharingMode: ExternalSharingMode
+    + allowAccessRequests: Boolean
+    + requireRequestReason: Boolean
+    --
+    + isSharingAllowed(mode): Boolean
+}
+
+' ==========================================================
+' RANK 1: WORKSPACE (LEFT) & USER (RIGHT)
+' ==========================================================
+class Workspace #EFF6FF {
+    + id: Long [PK]
+    + name: String
+    + description: String
+    + status: WorkspaceStatus
+    + createdAt: Instant
+    --
+    + getRootFolder(): Folder
+}
+
+class User #FEF3C7 {
+    + id: String [PK, UUID]
+    + email: String
+    + firstName: String
+    + lastName: String
+    + role: OrganizationRole
+    + createdAt: Instant
+    --
+    + belongsToOrg(): Boolean
+}
+
+' ==========================================================
+' RANK 2: FOLDER (LEFT) & TEAM (RIGHT)
+' ==========================================================
+class Folder #EFF6FF {
+    + id: Long [PK]
+    + name: String
+    + subspaceType: SubspaceType
+    + isDefaultSubspace: Boolean
+    + createdAt: Instant
+    --
+    + addSubFolder(name): Folder
+    + addDocument(doc)
+    + deleteCascade()
+}
+
+class Team #FEF3C7 {
+    + id: Long [PK]
+    + name: String
+    + description: String
+    + status: GroupStatus
+    + createdAt: Instant
+    --
+    + addMember(user): TeamMembership
+    + removeMember(user)
+    + transferManager(newManager)
+}
+
+' ==========================================================
+' RANK 3: DOCUMENT (LEFT), PERMISSION (CENTER), MEMBERSHIP (RIGHT)
+' ==========================================================
+class Document #EFF6FF {
+    + id: Long [PK]
+    + fileName: String
+    + fileHash: String [SHA-256]
+    + contentType: String
+    + fileSize: Long
+    + s3Bucket: String
+    + objectKey: String
+    + version: Integer
+    + uploadedByUserId: String
+    + uploadedAt: Instant
+    --
+    + verifyIntegrity(hash): Boolean
+    + createVersion(data): DocumentVersion
+}
+
+class Permission #FDF2F8 {
+    + id: Long [PK]
+    + permissionType: PermissionType
+    + permissionLevel: PermissionLevel
+    + recipientType: RecipientType
+    + grantedByUserId: String
+    + shareLinkToken: String
+    + passwordHash: String
+    + expiresAt: Instant
+    + revoked: Boolean
+    --
+    + isValid(): Boolean
+    + revoke(revokedBy)
+}
+
+class TeamMembership #FEF3C7 {
+    + id: Long [PK]
+    + role: TeamRole
+    + joinedAt: Instant
+    --
+    + isManager(): Boolean
+}
+
+' ==========================================================
+' RANK 4: DOCUMENT VERSION (LEFT) & ACCESS LOG (CENTER)
+' ==========================================================
+class DocumentVersion #EFF6FF {
+    + id: Long [PK]
+    + versionNumber: Integer
+    + fileHash: String
+    + fileSize: Long
+    + uploadedAt: Instant
+}
+
+class AccessLog #F1F5F9 {
+    + id: Long [PK]
+    + action: AuditAction
+    + timestamp: Instant
+    + actorUserId: String
+    + ipAddress: String
+    + resourceType: String
+    + resourceId: Long
+    + blockchainTxHash: String
+    --
+    + isAnchored(): Boolean
+}
+
+' ==========================================================
+' STRICT RANK ALIGNMENT (Guarantees even vertical/horizontal grid)
+' ==========================================================
+Organization -[hidden]right- WorkspacePolicy
+Workspace -[hidden]right- User
+Folder -[hidden]right- Team
+Document -[hidden]right- Permission
+Permission -[hidden]right- TeamMembership
+DocumentVersion -[hidden]right- AccessLog
+
+' ==========================================================
+' STRUCTURAL TREE RELATIONSHIPS
+' ==========================================================
+
+' Top-level ownership (Rank 0 -> Rank 1 & Rank 2)
+Organization "1" *-right- "0..1" WorkspacePolicy
+Organization "1" *--down- "0..*" Workspace : subspaces
+Organization "1" *--down- "0..*" User : members
+Organization "1" *--down- "0..*" Team : teams
+
+' Left Column: Resource Hierarchy (Rank 1 -> Rank 2 -> Rank 3 -> Rank 4)
+Workspace "1" *--down- "1" Folder : rootFolder
+Folder "1" *--left- "0..*" Folder : subFolders
+Folder "1" *--down- "0..*" Document : documents
+Document "1" *--down- "1..*" DocumentVersion : versions
+
+' Right Column: Subject Hierarchy (Rank 1 -> Rank 2 -> Rank 3)
+Team "1" *--down- "1..*" TeamMembership : roster
+User "1" <--up- "0..*" TeamMembership : member
+
+' Center Column: Permission Bridge (Clean horizontal/diagonal links, NO text overlap)
+Permission "0..*" -left-> "0..1" Folder
+Permission "0..*" -left-> "0..1" Document
+Permission "0..*" -right-> "0..1" Team
+Permission "0..*" -right-> "0..1" User
+
+' Compliance: Audit Trail on Documents
+AccessLog "0..*" -left-> "1" Document
+
+' ==========================================================
+' ENUMERATIONS REFERENCE PANEL (Cleanly aligned at the bottom)
+' ==========================================================
+package "Domain Enumerations Reference" as PkgEnums {
+    enum PermissionLevel <<enum>> {
+        VIEW
+        DOWNLOAD
+        EDIT
+    }
+
+    enum PermissionType <<enum>> {
+        ALLOW
+        EXCLUDE
+    }
+
+    enum OrganizationRole <<enum>> {
+        ROLE_SUPER_ADMIN
+        ROLE_ORG_ADMIN
+        ROLE_ORG_MANAGER
+        ROLE_USER
+    }
+
+    enum TeamRole <<enum>> {
+        MANAGER
+        MEMBER
+    }
+
+    enum AuditAction <<enum>> {
+        PREVIEW
+        DOWNLOAD
+        UPDATE
+        DELETE
+    }
+
+    PermissionLevel -[hidden]right- PermissionType
+    PermissionType -[hidden]right- OrganizationRole
+    OrganizationRole -[hidden]right- TeamRole
+    TeamRole -[hidden]right- AuditAction
+}
+
+AccessLog -[hidden]down- PkgEnums
+
+@enduml

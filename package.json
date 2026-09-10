@@ -1,0 +1,10 @@
+{
+  "name": "secure-document-sharing-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm --prefix securedocsharing-frontend start",
+    "build": "npm --prefix securedocsharing-frontend run build",
+    "test": "npm --prefix securedocsharing-frontend test"
+  }
+}

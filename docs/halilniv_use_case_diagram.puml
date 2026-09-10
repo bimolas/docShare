@@ -1,0 +1,103 @@
+@startuml Halilniv_UseCase_Diagram
+!theme plain
+left to right direction
+
+' ==========================================================
+' COMPACT & PROFESSIONAL STYLING
+' ==========================================================
+skinparam {
+    nodesep 22
+    ranksep 28
+    padding 2
+    wrapWidth 140
+    
+    packageStyle rectangle
+    roundcorner 6
+    shadowing false
+    
+    ActorBorderColor #1E293B
+    ActorBackgroundColor #F8FAFC
+    ActorFontSize 11
+    ActorFontStyle bold
+    
+    UsecaseBorderColor #2563EB
+    UsecaseBackgroundColor #EFF6FF
+    UsecaseFontSize 10
+    
+    ArrowColor #334155
+    ArrowFontSize 9
+    ArrowFontStyle italic
+    
+    RectangleBorderColor #64748B
+    RectangleBackgroundColor #FFFFFF
+}
+
+' ==========================================================
+' ACTORS
+' ==========================================================
+actor "Client" as Client
+
+actor "Administrateur" as Admin
+actor "API Financière" as ApiFinance <<Système Externe>>
+
+' ==========================================================
+' SYSTEM BOUNDARY
+' ==========================================================
+rectangle "Application Halilniv (Halal Invest)" {
+
+    ' --- SÉCURITÉ & PROFIL ---
+    usecase "S'authentifier" as UC_Auth
+    usecase "Gérer le profil\nutilisateur" as UC_Profil
+
+    ' --- ADMINISTRATION ---
+    usecase "Gérer les clients" as UC_ManageClients
+    usecase "Gérer les entreprises" as UC_ManageCompanies
+
+    ' --- CONSULTATION & CONFORMITÉ ---
+    usecase "Consulter la conformité\ndes entreprises" as UC_CheckCompliance
+    usecase "Rechercher\nune entreprise" as UC_SearchCompany
+    usecase "Calculer le statut\nde conformité" as UC_CalcCompliance
+    usecase "Récupérer les données\nfinancières" as UC_FetchFinance
+
+    ' --- WATCHLIST ---
+    usecase "Ajouter une entreprise\nà la Watchlist" as UC_AddToWatchlist
+    usecase "Créer une Watchlist" as UC_CreateWatchlist
+}
+
+' ==========================================================
+' ASSOCIATIONS ACTEURS (Lignes pleines, sans flèches inutiles)
+' ==========================================================
+
+' Acteur Client (Gauche)
+Client -- UC_Auth
+Client -- UC_Profil
+Client -- UC_CheckCompliance
+Client -- UC_AddToWatchlist
+
+' Acteur Administrateur (Droite)
+Admin -- UC_Auth
+Admin -- UC_ManageClients
+Admin -- UC_ManageCompanies
+
+' Système Externe API Financière (Droite)
+UC_FetchFinance -- ApiFinance
+
+' ==========================================================
+' RELATIONS ENTRE CAS D'UTILISATION (<<include>> et <<extend>>)
+' ==========================================================
+
+' Inclusions de consultation
+UC_CheckCompliance .right.> UC_SearchCompany : <<include>>
+UC_CheckCompliance .down.> UC_CalcCompliance : <<include>>
+UC_CalcCompliance .right.> UC_FetchFinance : <<include>>
+UC_ManageCompanies .down.> UC_FetchFinance : <<include>>
+
+' Extensions et gestion de Watchlist
+UC_AddToWatchlist .up.> UC_CheckCompliance : <<extend>>
+UC_AddToWatchlist .right.> UC_CreateWatchlist : <<include>>
+
+' Optional/Strict Authentication includes (si requis formellement)
+UC_Profil ..> UC_Auth : <<include>>
+UC_ManageClients ..> UC_Auth : <<include>>
+
+@enduml

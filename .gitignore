@@ -1,0 +1,131 @@
+# =============================================================================
+# Root .gitignore for SecureDocSharing (Spring Boot + Angular Monorepo)
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Maven / Java Build Artifacts
+# -----------------------------------------------------------------------------
+target/
+**/target/
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven wrapper jar (can be kept if committed, but standard to ignore wrapper downloads)
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+
+# Java VM crash logs
+hs_err_pid*
+replay_pid*
+
+# -----------------------------------------------------------------------------
+# Node / Angular Frontend Artifacts
+# -----------------------------------------------------------------------------
+node_modules/
+**/node_modules/
+.angular/
+**/.angular/
+dist/
+**/dist/
+out-tsc/
+**/out-tsc/
+bazel-out/
+chrome/
+**/chrome/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.eslintcache
+
+# -----------------------------------------------------------------------------
+# IDEs and Editors
+# -----------------------------------------------------------------------------
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Eclipse / STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/nbdist/
+/.nb-gradle/
+
+# Visual Studio Code
+.vscode/
+**/.vscode/
+.history/
+
+# Sublime / General
+*.sublime-workspace
+*.sublime-project
+
+# -----------------------------------------------------------------------------
+# Operating System Files
+# -----------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# -----------------------------------------------------------------------------
+# Environment, Database Volumes & Temp Files
+# -----------------------------------------------------------------------------
+.env
+.env.local
+*.local
+*.log
+scratch/
+tmp/
+**/tmp/
+
+# Docker persistent local volumes (if mounted locally)
+ganache_data/
+keycloak_data/
+
+# -----------------------------------------------------------------------------
+# Agent, AI & Assistant Metadata
+# -----------------------------------------------------------------------------
+.agents/
+**/.agents/
+.claude/
+**/.claude/
+.gemini/
+**/.gemini/
+skills-lock.json
+**/skills-lock.json
+
+# Scratch prompts and temporary test dumps
+*.txt
+!docs/*.txt
+JacksonDtoTest.java
+cli.md.md
+keycloak.zip
+patch_list_view*.ts
