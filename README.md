@@ -1,125 +1,127 @@
 # SecureDocSharing
 
-A full-stack secure document sharing platform built with **Angular 19**, **Spring Boot 3**, **Keycloak**, **MinIO**, **Kafka**, and **PostgreSQL**.
+> A secure, event-driven document sharing platform built around Spring Boot, Angular, Keycloak, Kafka, MinIO, PostgreSQL, Redis, and Docker.
 
----
+[![Java](https://img.shields.io/badge/Java-21-ED8B00?style=flat-square&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3-6DB33F?style=flat-square&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Angular](https://img.shields.io/badge/Angular-19-DD0031?style=flat-square&logo=angular&logoColor=white)](https://angular.dev/)
+[![Keycloak](https://img.shields.io/badge/Keycloak-IAM-4D4D4D?style=flat-square&logo=keycloak&logoColor=white)](https://www.keycloak.org/)
+[![Kafka](https://img.shields.io/badge/Apache%20Kafka-Event%20Streaming-231F20?style=flat-square&logo=apachekafka&logoColor=white)](https://kafka.apache.org/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
 
-## Table of Contents
+## Overview
 
-- [Prerequisites](#prerequisites)
-- [Project Structure](#project-structure)
-- [Step 1 — Start Infrastructure](#step-1--start-infrastructure-docker-compose)
-- [Step 2 — Start the Backend](#step-2--start-the-backend-spring-boot)
-- [Step 3 — Start the Frontend](#step-3--start-the-frontend-angular)
-- [Access the Application](#access-the-application)
-- [Demo Accounts](#demo-accounts)
-- [Service URLs](#service-urls)
-- [Troubleshooting](#troubleshooting)
+SecureDocSharing is a full-stack application for securely sharing documents while separating application concerns from identity, storage, messaging, caching, and infrastructure services.
 
----
+The project combines a Spring Boot backend and Angular frontend with a containerized infrastructure layer. Keycloak handles identity and access management, MinIO provides S3-compatible object storage, Kafka provides event streaming, PostgreSQL stores application data, and Redis provides caching.
 
-## Prerequisites
+## Architecture
 
-Make sure the following tools are installed:
-
-| Tool | Version | Install |
-|------|---------|---------|
-| Docker | 24+ | https://docs.docker.com/get-docker/ |
-| Docker Compose | v2+ | Included with Docker Desktop |
-| Java JDK | 21 | https://adoptium.net/ |
-| Node.js | 20+ | https://nodejs.org/ |
-| npm | 10+ | Included with Node.js |
-
-Verify your setup:
-
-```bash
-docker --version
-docker compose version
-java -version
-node --version
-npm --version
+```text
+                         ┌─────────────────────┐
+                         │      Angular 19      │
+                         │      Frontend       │
+                         └──────────┬──────────┘
+                                    │ HTTPS
+                                    ▼
+                         ┌─────────────────────┐
+                         │    Spring Boot 3    │
+                         │       Backend       │
+                         └──────┬────┬────┬────┘
+                                │    │    │
+                 ┌──────────────┘    │    └──────────────┐
+                 ▼                   ▼                   ▼
+          ┌────────────┐      ┌────────────┐      ┌────────────┐
+          │ PostgreSQL │      │   Redis    │      │   MinIO    │
+          │ Application│      │   Cache    │      │  Documents │
+          │    Data    │      │            │      │   / S3     │
+          └────────────┘      └────────────┘      └────────────┘
+                 
+                 ┌─────────────────────────────────────────┐
+                 │              Infrastructure              │
+                 │ Keycloak · Kafka · Zookeeper · Mailpit │
+                 └─────────────────────────────────────────┘
 ```
 
----
+## Core Technologies
+
+| Layer | Technology | Responsibility |
+|---|---|---|
+| Frontend | Angular 19 | Web application UI |
+| Backend | Spring Boot 3 / Java 21 | REST API and business logic |
+| Identity | Keycloak | Authentication, users, roles and clients |
+| Database | PostgreSQL | Persistent application data |
+| Object storage | MinIO | S3-compatible document storage |
+| Messaging | Apache Kafka + Zookeeper | Event streaming |
+| Cache | Redis | Application caching |
+| Email testing | Mailpit | Local email inspection |
+| Infrastructure | Docker Compose | Local service orchestration |
 
 ## Project Structure
 
-```
+```text
 secure-document-sharings/
-├── docker-compose.yml            # All infrastructure services
+├── docker-compose.yml
 ├── keycloak/
-│   └── realm-export.json         # Auto-imported Keycloak realm (users + config)
-├── src/                          # Spring Boot backend (Java 21)
+│   └── realm-export.json
+├── src/
+│   └── ...                  # Spring Boot backend
 ├── pom.xml
-└── securedocsharing-frontend/    
+└── securedocsharing-frontend/
     ├── package.json
     └── src/
 ```
 
----
+## Infrastructure
 
-## Step 1 — Start Infrastructure (Docker Compose)
+The complete local environment is orchestrated with Docker Compose:
 
-Open a terminal in the **project root** and run:
+| Service | Port | Purpose |
+|---|---:|---|
+| PostgreSQL | `5432` | Application database |
+| Keycloak | `8080` | Identity and access management |
+| MinIO | `9000` / `9001` | Object storage and console |
+| Kafka | `9092` | Event streaming |
+| Zookeeper | `2181` | Kafka coordination |
+| Redis | `6379` | Cache |
+| Mailpit | `8025` | Email testing UI |
+
+Keycloak is initialized from `keycloak/realm-export.json`, including the `docshare` realm configuration.
+
+## Getting Started
+
+### Prerequisites
+
+- Docker 24+
+- Docker Compose v2+
+- JDK 21
+- Node.js 20+
+- npm 10+
+
+### 1. Start infrastructure
 
 ```bash
 docker compose up -d
-```
-
-This starts:
-
-| Service | Port | Purpose |
-|---------|------|---------|
-| PostgreSQL | 5432 | Application database |
-| Keycloak | 8080 | Identity & authentication |
-| MinIO | 9000 / 9001 | File storage (S3-compatible) |
-| Kafka + Zookeeper | 9092 | Event streaming |
-| Mailpit | 8025 | Email testing UI |
-| Redis | 6379 | Caching |
-
-> **Keycloak is auto-configured on first start** — the realm `docshare`, all users, roles, and client settings are automatically imported from `keycloak/realm-export.json`. No manual Keycloak configuration is needed.
-
-Wait **30–60 seconds** for all services to become healthy, then verify:
-
-```bash
 docker compose ps
 ```
 
-All services should show **Up** status.
+Wait for the containers to become healthy before starting the application.
 
-Optionally confirm Keycloak is ready:
-
-```bash
-curl http://localhost:8080/realms/docshare/.well-known/openid-configuration
-```
-
-You should receive a JSON response (not an error).
-
----
-
-## Step 2 — Start the Backend (Spring Boot)
-
-Open a **new terminal** in the project root:
+### 2. Start the backend
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-> On Windows use: `mvnw.cmd spring-boot:run`
+Windows:
 
-The backend starts on **port 8443** (HTTPS). Wait until you see:
-
-```
-Started SecureDocSharingApplication in X.XXX seconds
+```powershell
+mvnw.cmd spring-boot:run
 ```
 
-> First startup may take 1–2 minutes while Maven downloads dependencies.
+The backend runs on HTTPS port `8443`.
 
----
-
-## Step 3 — Start the Frontend (Angular)
-
-Open a **new terminal** and navigate to the frontend folder:
+### 3. Start the frontend
 
 ```bash
 cd securedocsharing-frontend
@@ -127,48 +129,70 @@ npm install
 npm start
 ```
 
-The Angular dev server starts at **http://localhost:4200**.
+The Angular development server runs at `http://localhost:4200`.
 
-> `npm install` is only needed once (or when `package.json` changes).
+### 4. Open the application
 
----
-
-## Access the Application
-
-Once all three steps are complete, open your browser at:
-
-```
+```text
 http://localhost:4200
 ```
 
-You will be automatically redirected to the Keycloak login page.
+The application redirects authentication to Keycloak.
 
----
+## Engineering Highlights
 
+- **Centralized identity management** with Keycloak instead of implementing authentication as an isolated frontend concern.
+- **Event-driven infrastructure** using Kafka for asynchronous communication.
+- **Dedicated object storage** through MinIO rather than storing document binaries directly in PostgreSQL.
+- **Caching layer** with Redis.
+- **Containerized development environment** with all supporting infrastructure defined in Docker Compose.
+- **Separated frontend and backend** allowing each application layer to evolve independently.
+- **Reproducible Keycloak setup** through realm configuration committed with the project.
 
+## Development Commands
+
+```bash
+# Backend
+./mvnw spring-boot:run
+
+# Frontend
+cd securedocsharing-frontend
+npm install
+npm start
+
+# Infrastructure
+docker compose up -d
+docker compose ps
+docker compose down
+```
 
 ## Troubleshooting
 
-**Port already in use?**
-```bash
-docker compose down
-docker compose up -d
+### Keycloak login loop
+
+Make sure the frontend is running exactly at:
+
+```text
+http://localhost:4200
 ```
 
-**Keycloak login loop or "Invalid redirect URI"?**
-Make sure the Angular dev server is running on exactly `http://localhost:4200`. The Keycloak client is pre-configured for this URL only.
+The configured Keycloak client expects this development URL.
 
-**Backend fails to connect to the database?**
-Ensure `docker compose up -d` completed successfully and all containers show `Up` before starting Spring Boot.
+### Backend cannot connect to PostgreSQL
 
-**`./mvnw` permission denied?**
+Verify that the infrastructure containers are running:
+
+```bash
+docker compose ps
+```
+
+### Maven wrapper permission denied
+
 ```bash
 chmod +x mvnw
 ./mvnw spring-boot:run
 ```
 
-**`npm install` errors?**
-Make sure you are on Node.js 20+:
-```bash
-node --version   # must show v20.x.x or higher
-```
+## Project Status
+
+This repository is a development project focused on demonstrating secure application architecture, identity management, event-driven components, object storage, caching, and containerized infrastructure.
